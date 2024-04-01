@@ -1,0 +1,51 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "Senai-deploy",
+    "dateExported": "2024-04-01T13:13:28.846Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "6ccc4025-a668-4201-9836-265d70b4184e",
+            "colId": "7c728bed-36dc-4263-a626-4c7dbba7c68d",
+            "containerId": "",
+            "name": "loginAluno",
+            "url": "http://{{baseUrl}}:3334/aluno",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2024-03-31T00:49:11.337Z",
+            "modified": "2024-04-01T13:11:28.185Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n\"email\":\"PedroAlmeidaLauraSilva@gmail.com\",\n\"senha\":\"124\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "50eae1f0-fe22-433a-9d53-9b8ff47edec6",
+            "colId": "7c728bed-36dc-4263-a626-4c7dbba7c68d",
+            "containerId": "",
+            "name": "definir senha",
+            "url": "http://{{baseUrl}}:3334/aluno/definirSenha",
+            "method": "PATCH",
+            "sortNum": 30000,
+            "created": "2024-04-01T12:55:14.127Z",
+            "modified": "2024-04-01T13:11:40.631Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"PedroAlmeidaLauraSilva@gmail.com\",\n  \"senha\": \"125\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJQZWRyb0FsbWVpZGFMYXVyYVNpbHZhQGdtYWlsLmNvbSIsIm5hbWUiOiJQZWRybyBBbG1laWRhIiwiaWF0IjoxNzExOTc3MDg3LCJleHAiOjE3MTIwMjAyODd9.deomMbVTdgyJCzcCmWpQtYOimScfiKZq58BFWtPjE3E"
+            },
+            "tests": []
+        }
+    ]
+}
