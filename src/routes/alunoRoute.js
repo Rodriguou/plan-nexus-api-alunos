@@ -30,7 +30,9 @@ router.post("", async (req, res) => {
 router.patch("/definirSenha", async(req,res) =>{
 
     try{
-        const {email, senha,token} = req.body
+        const token = req.headers.authorization.split(" ")[1]
+
+        const {email, senha,} = req.body
         
         const aluno = {
             email,
