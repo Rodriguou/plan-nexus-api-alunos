@@ -1,4 +1,5 @@
 const alunoModel = require("../models/alunoModel")
+const { compararHash, gerarHash } = require("../utils/bcrypt")
 const { gerarToken } = require("../utils/jwt")
 
 function loginAluno(aluno) {
@@ -8,13 +9,12 @@ function loginAluno(aluno) {
 
         try {
 
-            const { email, senha} = aluno
+            const { email, senha } = aluno
 
             // verifica se o usuario existe
             let usuario = await alunoModel.findOne({
                 where: {
-                    email,
-                    senha
+                    email
                 }
             })
 
@@ -23,23 +23,29 @@ function loginAluno(aluno) {
                 ? usuario = usuario.dataValues
                 : (() => { resolve(null) })()
 
+            //Confirma se o hash da senha está certo.
+            const confirmarSenha = await compararHash(aluno.senha, usuario.senha)
 
-                // Deolve os dados do usuario sem a senha
-                let { senha: _ ,CPF:__ ,...resposta } = usuario
+            if (!confirmarSenha) {
+                resolve(null)
+            }
 
-                //Gera o token para verificar se está logado
-                resposta.token = gerarToken(resposta.email,resposta.nome,"12h")
+            // Deolve os dados do usuario sem a senha
+            let { senha: _, CPF: __, ...resposta } = usuario
 
-                await alunoModel.update({
-                    token: resposta.token
-                },
+            //Gera o token para verificar se está logado
+            resposta.token = gerarToken(resposta.email, resposta.nome, "12h")
+
+            await alunoModel.update({
+                token: resposta.token
+            },
                 {
-                    where:{
+                    where: {
                         email
                     }
                 })
 
-                resolve(resposta)
+            resolve(resposta)
         }
         catch (err) {
             // Se der algum erro inesperado no processo
@@ -50,4 +56,35 @@ function loginAluno(aluno) {
 
 }
 
-module.exports = { loginAluno }
+function definirSenha(aluno) {
+
+    return new Promise(async (resolve, reject) => {
+
+        try {
+            const senha = await gerarHash(aluno.senha)
+            const token = aluno.token
+            const email = aluno.email
+
+            alunoModel.update(
+                {
+                    senha
+                },
+                {
+                    where: {
+                        email,
+                        token
+                    }
+                }
+            )
+            .then((r) => resolve(r))
+            .catch((e) => reject(e))
+        }
+
+        catch (err) {
+            reject(err)
+
+        }
+    })
+}
+
+module.exports = { loginAluno, definirSenha }
