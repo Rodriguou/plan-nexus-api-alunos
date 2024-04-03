@@ -1,15 +1,14 @@
-FROM node:20-alpine
+FROM node:20.12.0
 
 WORKDIR /backend
 
-COPY package.json ./
+COPY . .
 
 RUN npm install
 
-COPY . .
 
-ENV PORT 3333
+ENV PORT 3334
 
-EXPOSE 3333
+EXPOSE 3334
 
-CMD [ "npm" "run" "start" ]
+CMD [ "npm", "run", "start" ]
