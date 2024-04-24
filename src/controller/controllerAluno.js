@@ -1,9 +1,9 @@
 const alunoModel = require("../models/alunoModel")
 const { compararHash, gerarHash } = require("../utils/bcrypt")
 const { gerarToken } = require("../utils/jwt")
+const {Sequelize} = require("sequelize")
 
 function loginAluno(aluno) {
-
 
     return new Promise(async (resolve, reject) => {
 
@@ -11,8 +11,16 @@ function loginAluno(aluno) {
 
             const { email, senha } = aluno
 
+            const sequelize_login = new Sequelize({
+                database: process.env.database_name,
+                username: process.env.database_user_root, // dps atualizar para o login aluno
+                password: process.env.database_password_root, // dps atualizar para o senha aluno
+                host: process.env.database_host,
+                dialect: 'mysql'
+            })
+
             // verifica se o usuario existe
-            let usuario = await alunoModel.findOne({
+            let usuario = await alunoModel(sequelize_login).findOne({
                 where: {
                     email
                 }
@@ -36,7 +44,7 @@ function loginAluno(aluno) {
             //Gera o token para verificar se está logado
             resposta.token = gerarToken(resposta.email, resposta.nome, "12h")
 
-            await alunoModel.update({
+            await alunoModel(sequelize_login).update({
                 token: resposta.token
             },
                 {
@@ -65,7 +73,7 @@ function definirSenha(aluno, sequelize) {
             const token = aluno.token
             const email = aluno.email
 
-            alunoModel.update(
+            alunoModel(sequelize).update(
                 {
                     senha
                 },
