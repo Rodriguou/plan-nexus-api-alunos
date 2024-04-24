@@ -1,17 +1,17 @@
 const router = require("express").Router()
 const { loginAluno, definirSenha } = require("../controller/controllerAluno")
-const novoErro = require("../utils/erros")
+const {tratarMensagensDeErro} = require("../utils/erros")
 const { alunoLoginValidacao } = require("../utils/validacao")
 const authMiddleware = require("../middleware/auth")
+
 
 //Rota de login
 router.post("/login", async (req, res) => {
 
     try {
-        const {email, senha } = req.body
+        const {email, senha} = req.body
       
         const aluno = {email,senha}
-        console.log(aluno)
         
         const alunoValidado = alunoLoginValidacao.parse(aluno)
         console.log("sim: ",alunoValidado)
@@ -55,6 +55,5 @@ router.patch("/definirSenha", async(req,res) =>{
     }
 
 })
-
 
 module.exports = router
