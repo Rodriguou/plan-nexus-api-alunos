@@ -2,9 +2,10 @@ const router = require("express").Router()
 const { loginAluno, definirSenha } = require("../controller/controllerAluno")
 const novoErro = require("../utils/erros")
 const { alunoLoginValidacao } = require("../utils/validacao")
+const authMiddleware = require("../middleware/auth")
 
 //Rota de login
-router.post("", async (req, res) => {
+router.post("/login", async (req, res) => {
 
     try {
         const {email, senha } = req.body
@@ -21,12 +22,12 @@ router.post("", async (req, res) => {
         :res.status(400).json("Usuario ou senha inválidos")
     }
     catch(err){
-        const status = err.status?? 500 
-        const msg = err.issues ?? err.message 
-        res.status(status).json(msg)
+        const erroTratado = await tratarMensagensDeErro(err)
+        res.status(erroTratado.status).json({ errMsg: erroTratado.message, "statusCode": erroTratado.status })
     }
 })
 
+router.use(authMiddleware)
 router.patch("/definirSenha", async(req,res) =>{
 
     try{
@@ -40,7 +41,7 @@ router.patch("/definirSenha", async(req,res) =>{
             token
         }
 
-        const response = await definirSenha(aluno)
+        const response = await definirSenha(aluno, req.sequelize)
 
         response[0] == 1
         ? res.status(200).json({ "msg": "Atualizado com sucesso", "statusCode": 200 })
@@ -49,12 +50,11 @@ router.patch("/definirSenha", async(req,res) =>{
 
     }
     catch(err){
-        const status = err.status?? 500 
-        const msg = err.issues ?? err.message 
-        res.status(status).json(msg)
+        const erroTratado = await tratarMensagensDeErro(err)
+        res.status(erroTratado.status).json({ errMsg: erroTratado.message, "statusCode": erroTratado.status })
     }
 
-
 })
+
 
 module.exports = router
