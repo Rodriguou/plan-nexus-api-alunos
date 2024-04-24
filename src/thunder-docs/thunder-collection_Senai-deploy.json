@@ -1,51 +1,80 @@
 {
-    "client": "Thunder Client",
+    "clientName": "Thunder Client",
     "collectionName": "Senai-deploy",
-    "dateExported": "2024-04-01T13:13:28.846Z",
-    "version": "1.1",
+    "collectionId": "94fc72f6-2cc2-4344-b1b9-9789819f00e7",
+    "dateExported": "2024-04-24T23:28:46.219Z",
+    "version": "1.2",
     "folders": [],
     "requests": [
         {
-            "_id": "6ccc4025-a668-4201-9836-265d70b4184e",
-            "colId": "7c728bed-36dc-4263-a626-4c7dbba7c68d",
+            "_id": "f4e77e45-51a1-4a50-a8b2-b4fc0feaf71a",
+            "colId": "94fc72f6-2cc2-4344-b1b9-9789819f00e7",
             "containerId": "",
             "name": "loginAluno",
-            "url": "http://{{baseUrl}}:3334/aluno",
+            "url": "http://{{baseUrl}}:3334/aluno/login",
             "method": "POST",
             "sortNum": 20000,
-            "created": "2024-03-31T00:49:11.337Z",
-            "modified": "2024-04-01T13:11:28.185Z",
+            "created": "2024-04-24T00:33:59.839Z",
+            "modified": "2024-04-24T13:12:48.187Z",
             "headers": [],
-            "params": [],
             "body": {
                 "type": "json",
-                "raw": "{\n\"email\":\"PedroAlmeidaLauraSilva@gmail.com\",\n\"senha\":\"124\"\n}",
+                "raw": "{\n\"email\":\"MarianaPereira@gmail.com\",\n\"senha\":\"125\"\n}",
                 "form": []
-            },
-            "tests": []
+            }
         },
         {
-            "_id": "50eae1f0-fe22-433a-9d53-9b8ff47edec6",
-            "colId": "7c728bed-36dc-4263-a626-4c7dbba7c68d",
+            "_id": "fb941d42-ab30-4dbb-9951-91500a770a4d",
+            "colId": "94fc72f6-2cc2-4344-b1b9-9789819f00e7",
             "containerId": "",
             "name": "definir senha",
             "url": "http://{{baseUrl}}:3334/aluno/definirSenha",
             "method": "PATCH",
             "sortNum": 30000,
-            "created": "2024-04-01T12:55:14.127Z",
-            "modified": "2024-04-01T13:11:40.631Z",
-            "headers": [],
-            "params": [],
+            "created": "2024-04-24T00:33:59.841Z",
+            "modified": "2024-04-24T23:28:07.905Z",
+            "headers": [
+                {
+                    "name": "email",
+                    "value": "MarianaPereira@gmail.com"
+                }
+            ],
             "body": {
                 "type": "json",
-                "raw": "{\n  \"email\": \"PedroAlmeidaLauraSilva@gmail.com\",\n  \"senha\": \"125\"\n}",
+                "raw": "{\n  \"email\": \"MarianaPereira@gmail.com\",\n  \"senha\": \"126\"\n}",
                 "form": []
             },
             "auth": {
                 "type": "bearer",
-                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJQZWRyb0FsbWVpZGFMYXVyYVNpbHZhQGdtYWlsLmNvbSIsIm5hbWUiOiJQZWRybyBBbG1laWRhIiwiaWF0IjoxNzExOTc3MDg3LCJleHAiOjE3MTIwMjAyODd9.deomMbVTdgyJCzcCmWpQtYOimScfiKZq58BFWtPjE3E"
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJNYXJpYW5hUGVyZWlyYUBnbWFpbC5jb20iLCJuYW1lIjoiTWFyaWFuYSBQZXJlaXJhIiwiaWF0IjoxNzEzOTY0MzY4LCJleHAiOjE3MTQwMDc1Njh9.kmXC0MMrJIWY3LgmaXRqZ8CkGdqkfp56aags2FHl7T0"
+            }
+        },
+        {
+            "_id": "aa8b33ad-14c5-4482-bc73-19da281895a2",
+            "colId": "94fc72f6-2cc2-4344-b1b9-9789819f00e7",
+            "containerId": "",
+            "name": "criar reserva",
+            "url": "http://{{baseUrl}}:3334/reserva/criar",
+            "method": "POST",
+            "sortNum": 60000,
+            "created": "2024-04-24T13:15:10.375Z",
+            "modified": "2024-04-24T23:28:05.370Z",
+            "headers": [
+                {
+                    "name": "email",
+                    "value": "MarianaPereira@gmail.com"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"fk_aluno\": 127,\n  \"fk_produto\": 10, \n  \"quantidade\": 2,\n  \"retirada\": \"2024-04-23T09:00:00Z\",  \n  \"status\" : 1\n  }",
+                "form": []
             },
-            "tests": []
+            "auth": {
+                "type": "bearer",
+                "bearer": "NECESSARIO TOKEN"
+            }
         }
-    ]
+    ],
+    "ref": "f3WWMPMJiiv3XssE_0WBr1qbnnzYqJiV4-srVsF3v860rPcFvKCONDP82pb9UMeMipfCAb9dneUHju1aICTpUw"
 }
