@@ -2,7 +2,7 @@
     "clientName": "Thunder Client",
     "collectionName": "Senai-deploy",
     "collectionId": "94fc72f6-2cc2-4344-b1b9-9789819f00e7",
-    "dateExported": "2024-04-24T13:21:43.017Z",
+    "dateExported": "2024-04-24T23:28:46.219Z",
     "version": "1.2",
     "folders": [],
     "requests": [
@@ -32,11 +32,11 @@
             "method": "PATCH",
             "sortNum": 30000,
             "created": "2024-04-24T00:33:59.841Z",
-            "modified": "2024-04-24T13:13:10.904Z",
+            "modified": "2024-04-24T23:28:07.905Z",
             "headers": [
                 {
-                    "name": "cpf",
-                    "value": "47299245080"
+                    "name": "email",
+                    "value": "MarianaPereira@gmail.com"
                 }
             ],
             "body": {
@@ -58,11 +58,11 @@
             "method": "POST",
             "sortNum": 60000,
             "created": "2024-04-24T13:15:10.375Z",
-            "modified": "2024-04-24T13:20:16.457Z",
+            "modified": "2024-04-24T23:28:05.370Z",
             "headers": [
                 {
-                    "name": "cpf",
-                    "value": "47299245080"
+                    "name": "email",
+                    "value": "MarianaPereira@gmail.com"
                 }
             ],
             "body": {
@@ -76,5 +76,5 @@
             }
         }
     ],
-    "ref": "f3WWMPMJiiv3XssE_0WBrxA9UjkN6FQhQhsk3JSWezs54tdqh9ej2vryRQuM5RyG1L-uOVAXKx90yhLpu7GxMw"
+    "ref": "f3WWMPMJiiv3XssE_0WBr1qbnnzYqJiV4-srVsF3v860rPcFvKCONDP82pb9UMeMipfCAb9dneUHju1aICTpUw"
 }
