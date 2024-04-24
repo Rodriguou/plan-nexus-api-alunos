@@ -25,7 +25,7 @@ function validarDataToken(token) {
     })
 }
 
-async function encontrarAlunoLogin(cpf, token) {
+async function encontrarAlunoLogin(email, token) {
 
     // Se conecta usando um usuario q só tem acesso a uma view de login
     const sequelize_login = new Sequelize({
@@ -38,7 +38,7 @@ async function encontrarAlunoLogin(cpf, token) {
 
     const response = await alunoModel(sequelize_login).findOne({
         where: {
-            CPF: cpf,
+            email: email,
             token
         }
     })
@@ -48,12 +48,12 @@ async function encontrarAlunoLogin(cpf, token) {
     return response
 }
 
-function criarConexaoBanco(usuarioBanco, senhaBanco) {
+function criarConexaoBanco() {
 
     const sequelize = new Sequelize({
         database: process.env.database_name,
-        username: usuarioBanco,
-        password: senhaBanco,
+        username: process.env.database_user_aluno,
+        password: process.env.database_password_aluno,
         host: process.env.database_host,
         dialect: 'mysql'
     });
@@ -68,21 +68,21 @@ const authMiddleware = (req, res, next) => {
     return new Promise(async (resolve, reject) => {
 
         try {
-            const { cpf } = req.headers
+            const { email } = req.headers
             const token = req.headers.authorization.split(" ")[1]
             
-            if (!!cpf == false || !!token == false) {
+            if (!!email == false || !!token == false) {
                 novoErro("Usuario ou token inválidos, permissão negada", 403)
             }
 
             await validarDataToken(token)
             .catch((e)=> novoErro("Token inválido ou expirado", 403))
 
-            const aluno = await encontrarAlunoLogin(cpf, token) // procura o funcionario no banco
+            const aluno = await encontrarAlunoLogin(email, token) // procura o funcionario no banco
 
             // const { usuarioBanco, senhaBanco } = definirPermissaoNoBanco(funcionario) // define a permissão dele de acordo com o banco
 
-            const sequelize = criarConexaoBanco(usuarioBanco, senhaBanco) // cria uma conexão no banco com o nivel da permissão
+            const sequelize = criarConexaoBanco() // cria uma conexão no banco com o nivel da permissão
 
             //Autentica a conexão no banco de dados
             await sequelize.authenticate()
@@ -91,7 +91,7 @@ const authMiddleware = (req, res, next) => {
 
             // Define o req.sequelize 
             req.sequelize = sequelize
-            req.aluno = {cpf, token}
+            req.aluno = {email, token}
             // Prossiga para a próxima etapa da requisição
             next();
         }
