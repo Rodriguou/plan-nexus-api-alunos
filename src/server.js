@@ -7,7 +7,7 @@ const bodyParser = require("body-parser")
 
 //Import das rotas
 const alunoRota = require("./routes/alunoRoute")
-
+const reservaRota = require("./routes/reservaRoute")
 
 // variaveis de ambiente
 
@@ -22,5 +22,6 @@ app.use(bodyParser.json());
 //Rotas
 
 app.use("/aluno",alunoRota)
+app.use("/reserva", reservaRota)
 
 app.listen(port, () => console.log("Server listen on : " + port))
