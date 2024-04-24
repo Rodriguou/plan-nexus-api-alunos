@@ -56,7 +56,7 @@ function loginAluno(aluno) {
 
 }
 
-function definirSenha(aluno) {
+function definirSenha(aluno, sequelize) {
 
     return new Promise(async (resolve, reject) => {
 
