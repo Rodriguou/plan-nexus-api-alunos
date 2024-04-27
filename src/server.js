@@ -24,4 +24,9 @@ app.use(bodyParser.json());
 app.use("/aluno",alunoRota)
 app.use("/reserva", reservaRota)
 
+// Rota para teste
+app.get("/", (req, res) => {
+    res.send("Backend is up and running!");
+});
+
 app.listen(port, () => console.log("Server listen on : " + port))
