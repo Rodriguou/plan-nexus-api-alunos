@@ -62,9 +62,7 @@ function recuperarSenha(email) {
             await enviarEmail(email, "", "Recuperação de Senha AAPM", `<h1>Clique para atualizar sua senha: <a href="http://teste/${token}" >Aqui</a> </h1> `)
                 .then((r) => {
                     if (!!r.accepted[0] == true) {
-                        resolve("Email enviado.")
-
-
+                        resolve(r.accepted[0])
                     }
                     else {
                         reject("Email não encontrado ou inválido.")
@@ -81,7 +79,6 @@ function procurarUsuarioPeloEmail(email, sequelize) {
 
     return new Promise(async (resolve, rejetc) => {
 
-        console.log("procurar email", email)
         const resultadoEmaiAluno = await sequelize.query("select * from todos_alunos where email = ?", {
             replacements: [email],
             type: sequelize.QueryTypes.SELECT
@@ -97,7 +94,7 @@ function procurarUsuarioPeloEmail(email, sequelize) {
         }
 
         if (!!resultadoEmaiAluno[0] == false && !!resultadoEmailFuncionario[0] == false) {
-            rejetc("Email não encontrado")
+            rejetc({errMsg:"Email não encontrado", "email": email})
         }
 
         !!resultadoEmaiAluno[0] == true ? resolve(resultadoEmaiAluno) : resolve(resultadoEmailFuncionario)
@@ -128,11 +125,32 @@ function atualizarTokenUsuario(usuario, token, sequelize) {
     })
 }
 
+async function recuperarMultiplasSenhas(listaEmail){
+
+    const listaEmailEnviado = []
+    const listaEmailErro = []
+    const listaEmailMockada = ["mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com"]
+
+    const listaPromise = listaEmailMockada.map((email) => recuperarSenha(email) )
+
+    await Promise.all(listaPromise)
+    .then((r)=>{
+        console.log("Resposta: ", r)
+        listaEmailEnviado.push(r)
+    })
+    .catch((e) =>{
+        listaEmailErro.push(e)
+    })
+
+    const response = {listaEmailEnviado,listaEmailErro}
+    console.log(response)
+}
+
 // enviarEmail("mvfs8001@gmail.com", "", "salve", "Terminar o back hj né dog.")
 
 
-
-recuperarSenha("marcossantos8002@gmail.com")
-    .then((r) => console.log(r))
-    .catch((e) => console.log(e))
+recuperarMultiplasSenhas()
+// recuperarSenha("marcossantos8002@gmail.com")
+//     .then((r) => console.log(r))
+//     .catch((e) => console.log(e))
 // enviarEmail("laiza0700@gmail.com","","KKKKKKKKKKKKKKKKKKKKKKKKKKK","NE")
