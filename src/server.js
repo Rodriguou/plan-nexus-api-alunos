@@ -26,7 +26,7 @@ app.use("/reserva", reservaRota)
 
 // Rota para teste
 app.get("/", (req, res) => {
-    res.send("Backend is up and running!");
+    res.send("Teste");
 });
 
 app.listen(port, () => console.log("Server listen on : " + port))
