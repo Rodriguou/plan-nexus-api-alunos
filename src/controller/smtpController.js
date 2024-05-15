@@ -8,8 +8,6 @@ const { gerarToken } = require("../utils/jwt");
 
 // Configura a rota do emaill
 
-console.log(process.env.PASS_AUTH_SMTP)
-
 const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
@@ -31,13 +29,12 @@ async function enviarEmail(emailPara, emailCopia, titulo, corpoHtml) {
         subject: titulo,
         html: corpoHtml // Conteudo do email,
     })
-    console.log(new Date().toLocaleTimeString())
 
     return info
 
 }
 
-function recuperarSenha(email) {
+function definirSenha(email) {
 
     return new Promise(async (resolve, reject) => {
 
@@ -59,7 +56,7 @@ function recuperarSenha(email) {
 
             await atualizarTokenUsuario(usuario[0], token, sequelize)
 
-            await enviarEmail(email, "", "Recuperação de Senha AAPM", `<h1>Clique para atualizar sua senha: <a href="http://teste/${token}" >Aqui</a> </h1> `)
+            await enviarEmail(email, "", "Definição de Senha AAPM", `<h1>Clique para atualizar sua senha: <a href="http://teste/${token}" >Aqui</a> </h1> `)
                 .then((r) => {
                     if (!!r.accepted[0] == true) {
                         resolve(r.accepted[0])
@@ -94,7 +91,7 @@ function procurarUsuarioPeloEmail(email, sequelize) {
         }
 
         if (!!resultadoEmaiAluno[0] == false && !!resultadoEmailFuncionario[0] == false) {
-            rejetc({errMsg:"Email não encontrado", "email": email})
+            rejetc({ errMsg: "Email não encontrado", "email": email })
         }
 
         !!resultadoEmaiAluno[0] == true ? resolve(resultadoEmaiAluno) : resolve(resultadoEmailFuncionario)
@@ -125,32 +122,43 @@ function atualizarTokenUsuario(usuario, token, sequelize) {
     })
 }
 
-async function recuperarMultiplasSenhas(listaEmail){
+function definirMultiplasSenhas(listaEmail) {
 
-    const listaEmailEnviado = []
-    const listaEmailErro = []
-    const listaEmailMockada = ["mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com","mvfs8001@gmail.com","marcossantos8002@gmail.com","markito8003@gmail.com"]
+    return new Promise(async (resolve, reject) => {
+        try {
 
-    const listaPromise = listaEmailMockada.map((email) => recuperarSenha(email) )
+            const listaEmailEnviado = []
+            const listaEmailErro = []
 
-    await Promise.all(listaPromise)
-    .then((r)=>{
-        console.log("Resposta: ", r)
-        listaEmailEnviado.push(r)
+            const listaPromise = listaEmail.map((aluno) => definirSenha(aluno.email))
+
+            await Promise.all(listaPromise)
+                .then((r) => {
+                    console.log("Resposta: ", r)
+                    listaEmailEnviado.push(r)
+                })
+                .catch((e) => {
+                    listaEmailErro.push(e)
+                })
+            const response = { listaEmailEnviado, listaEmailErro }
+
+            // FATORAR DEPOIS
+
+            let htmlResponse = "E-mails enviado com sucesso:  \n"
+            !!listaEmailEnviado[0] == true ? listaEmailEnviado[0].map((email) => htmlResponse += `<h3>${email} \n</h3> `) : ""
+            htmlResponse += "E-mails malsucedidos: \n"
+            !!listaEmailErro[0] == true ? listaEmailErro[0].map((email) => htmlResponse += `<h3>${email} \n</h3> `) : ""
+
+            // Envia um e-mail para confirmar q enviou tudo como deveria.
+            enviarEmail("spectra.inc22@gmail.com", "mvfs8001@gmail.com", `Relatório de e-mail - ${Date()} `, htmlResponse)
+            resolve(response)
+        }
+        catch (err) {
+            reject(err)
+        }
     })
-    .catch((e) =>{
-        listaEmailErro.push(e)
-    })
 
-    const response = {listaEmailEnviado,listaEmailErro}
-    console.log(response)
 }
 
-// enviarEmail("mvfs8001@gmail.com", "", "salve", "Terminar o back hj né dog.")
 
-
-recuperarMultiplasSenhas()
-// recuperarSenha("marcossantos8002@gmail.com")
-//     .then((r) => console.log(r))
-//     .catch((e) => console.log(e))
-// enviarEmail("laiza0700@gmail.com","","KKKKKKKKKKKKKKKKKKKKKKKKKKK","NE")
+module.exports = { definirMultiplasSenhas }

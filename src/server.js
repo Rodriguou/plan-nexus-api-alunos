@@ -8,6 +8,7 @@ const bodyParser = require("body-parser")
 //Import das rotas
 const alunoRota = require("./routes/alunoRoute")
 const reservaRota = require("./routes/reservaRoute")
+const smtpRota = require("./routes/smtpRoute")
 
 // variaveis de ambiente
 
@@ -23,6 +24,7 @@ app.use(bodyParser.json());
 
 app.use("/aluno",alunoRota)
 app.use("/reserva", reservaRota)
+app.use("/smtp", smtpRota)
 
 // Rota para teste
 app.get("/", (req, res) => {
